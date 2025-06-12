@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Red2roast - European Market Expansion</title>
+    <!-- Chosen Palette: Energetic & Playful -->
+    <!-- Application Structure Plan: The SPA is structured as a narrative journey, guiding the user from the high-level story down to the detailed financials. A sticky navigation bar allows users to jump between key sections: 1. **Our Story & Mission** (The 'Why'), 2. **The Market Opportunity** (The 'Where'), 3. **The Financial Case** (The 'How'), and 4. **Our Impact** (The 'Who'). This thematic structure was chosen over a linear report format to make the complex information more digestible and to allow stakeholders to explore sections based on their interests, while still maintaining a logical flow. The user journey starts with the compelling brand story to create engagement, then presents the market validation, followed by the financial proof, and concludes with the social impact, creating a holistic and persuasive business case. -->
+    <!-- Visualization & Content Choices: 
+        - **Value Chain:** Goal: Inform. Method: HTML/CSS diagram to visually show the % value captured at each stage, justifying the business model. No SVG/Mermaid.
+        - **Market Size (TAM/SAM/SOM):** Goal: Compare. Method: Chart.js Doughnut chart to show the scale of the opportunity.
+        - **Revenue & Profit Growth:** Goal: Change. Method: Chart.js Combo Bar/Line chart to show the "hockey stick" growth story.
+        - **Go-to-Market Strategy:** Goal: Compare/Change. Method: Chart.js Stacked Area chart to illustrate the evolving sales channel mix over time.
+        - **Startup Funding:** Goal: Inform. Method: Chart.js Waterfall chart to clearly show the use of initial funds and prove solvency.
+        - **Path to Stability:** Goal: Change. Method: Chart.js Combo Bar/Line chart to show debt repayment against growing operating cash flow, demonstrating de-risking.
+        - **Impact Metrics:** Goal: Inform. Method: Large, bold text cards for key numbers (e.g., '2,500 Farmers') for immediate impact.
+        All charts use Chart.js on Canvas, adhering to NO SVG/Mermaid constraints. Interactions are handled with vanilla JS for navigation and potential future filters. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8f9fa;
+        color: #073b4c;
+      }
+      .card {
+        background-color: white;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+          0 2px 4px -2px rgb(0 0 0 / 0.1);
+        padding: 1.5rem;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      }
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+          0 4px 6px -4px rgb(0 0 0 / 0.1);
+      }
+      .chart-container {
+        position: relative;
+        width: 100%;
+        height: 300px;
+        max-height: 400px;
+      }
+      @media (min-width: 768px) {
+        .chart-container {
+          height: 350px;
+        }
+      }
+      .sticky-nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background-color: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+      .nav-link {
+        transition: color 0.2s;
+      }
+      .nav-link:hover {
+        color: #ff6b6b;
+      }
+      .section-title {
+        font-size: 2.25rem;
+        font-weight: 800;
+        color: #118ab2;
+        margin-bottom: 1rem;
+      }
+      .kpi-value {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #ff6b6b;
+      }
+      .kpi-label {
+        font-size: 1rem;
+        color: #073b4c;
+      }
+      .value-chain-stage {
+        border-left: 4px solid;
+        padding-left: 1rem;
+        margin-bottom: 1.5rem;
+      }
+    </style>
+  </head>
+  <body class="antialiased">
+    <header class="text-center py-12 bg-white">
+      <img
+        src="/red2roast/red2roastlogo.jpeg"
+        alt="Red2roast Logo"
+        class="mx-auto h-40 w-auto"
+      />
+      <p class="mt-4 text-xl text-[#118AB2] font-semibold">
+        Unlocking the Potential of Premium Ugandan Specialty Coffee in Europe
+      </p>
+    </header>
+
+    <nav class="sticky-nav shadow-md">
+      <div class="container mx-auto px-6 py-3">
+        <div
+          class="flex justify-center items-center space-x-6 md:space-x-10 text-[#073B4C] font-semibold"
+        >
+          <a href="#story" class="nav-link">Our Story</a>
+          <a href="#market" class="nav-link">The Market</a>
+          <a href="#financials" class="nav-link">The Financials</a>
+          <a href="#impact" class="nav-link">Our Impact</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container mx-auto px-6 py-12 space-y-24">
+      <section id="story">
+        <h2 class="section-title text-center">
+          Our Story: Capturing the Value Chain
+        </h2>
+        <p class="max-w-3xl mx-auto text-center text-lg mb-12">
+          For too long, exceptional coffees like ours have seen most of their
+          value captured by intermediaries. This venture is a strategic
+          expansion to move beyond production and establish a direct-to-market
+          presence in Europe. By controlling the high-margin retail and
+          wholesale segments, we ensure the unique story and superior quality of
+          our coffee reach the consumer intact.
+        </p>
+        <div class="card max-w-4xl mx-auto">
+          <h3 class="text-2xl font-bold text-center mb-8 text-[#118AB2]">
+            The Value Journey of a Single Cup
+          </h3>
+          <div class="space-y-6">
+            <div class="value-chain-stage border-[#FFD166]">
+              <h4 class="font-bold text-xl">Farming & Exporting</h4>
+              <p class="text-2xl font-extrabold text-[#FFD166]">&lt; 10%</p>
+              <p class="text-sm">
+                Of the final retail price is captured at the origin by farmers
+                and initial exporters.
+              </p>
+            </div>
+            <div class="value-chain-stage border-[#FF6B6B]">
+              <h4 class="font-bold text-xl">Roasting & Distribution</h4>
+              <p class="text-2xl font-extrabold text-[#FF6B6B]">~15%</p>
+              <p class="text-sm">
+                Value is added, but it remains a minority share of the total.
+              </p>
+            </div>
+            <div class="value-chain-stage border-[#06D6A0]">
+              <h4 class="font-bold text-xl">Retail & Marketing</h4>
+              <p class="text-2xl font-extrabold text-[#06D6A0]">&gt; 75%</p>
+              <p class="text-sm">
+                The vast majority of the profit is captured at the point of sale
+                to the end consumer.
+              </p>
+            </div>
+          </div>
+          <p
+            class="mt-8 text-center font-semibold text-lg bg-[#073B4C] text-white p-4 rounded-lg"
+          >
+            Our business model is strategically designed to capture this
+            lucrative retail margin, creating significant value for our partners
+            and stakeholders.
+          </p>
+        </div>
+      </section>
+
+      <section id="market">
+        <h2 class="section-title text-center">The Market Opportunity</h2>
+        <p class="max-w-3xl mx-auto text-center text-lg mb-12">
+          The Dutch specialty coffee market represents a significant
+          opportunity. We are targeting a specific niche: the "Mindful Coffee
+          Lover" who values quality, authenticity, and the positive impact of
+          their purchase.
+        </p>
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+          <div class="card">
+            <h3 class="text-2xl font-bold text-center mb-4 text-[#118AB2]">
+              Dutch Coffee Market Size
+            </h3>
+            <div class="chart-container mx-auto max-w-sm">
+              <canvas id="marketSizeChart"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <h3 class="text-2xl font-bold text-center mb-4 text-[#118AB2]">
+              Our Target Consumer
+            </h3>
+            <div class="space-y-4">
+              <p><strong class="text-[#FF6B6B]">Age:</strong> 30-45 years</p>
+              <p>
+                <strong class="text-[#FF6B6B]">Values:</strong> Premium quality,
+                unique flavor profiles, demonstrable fair-trade practices, and a
+                genuine brand story.
+              </p>
+              <p>
+                <strong class="text-[#FF6B6B]">Lifestyle:</strong> Enjoys home
+                brewing and actively supports brands with a positive social and
+                environmental footprint.
+              </p>
+              <p class="mt-4 p-3 bg-gray-100 rounded-lg">
+                Red2Roast is crafted for the conscious choices of this
+                discerning consumer.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="financials">
+        <h2 class="section-title text-center">The Financial Case</h2>
+        <p class="max-w-3xl mx-auto text-center text-lg mb-12">
+          Our financial plan demonstrates a well-managed, strategically sound
+          venture with a clear path to significant profitability and exceptional
+          returns. The venture is designed for strong growth while maintaining
+          financial health and stability.
+        </p>
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 text-center"
+        >
+          <div class="card p-4">
+            <div class="kpi-value" id="kpi-revenue">€2.1M</div>
+            <div class="kpi-label">Projected Revenue (2030)</div>
+          </div>
+          <div class="card p-4">
+            <div class="kpi-value" id="kpi-net-income">€217k</div>
+            <div class="kpi-label">Projected Net Income (2030)</div>
+          </div>
+          <div class="card p-4">
+            <div class="kpi-value" id="kpi-gross-margin">~52%</div>
+            <div class="kpi-label">Stable Gross Margin</div>
+          </div>
+          <div class="card p-4">
+            <div class="kpi-value" id="kpi-net-margin">~10%</div>
+            <div class="kpi-label">Stable Net Profit Margin</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="card">
+            <h3 class="text-xl font-bold text-center mb-4 text-[#118AB2]">
+              The Growth Story: Revenue & Profitability
+            </h3>
+            <div class="chart-container">
+              <canvas id="growthChart"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-bold text-center mb-4 text-[#118AB2]">
+              Go-to-Market: Sales Channel Mix
+            </h3>
+            <div class="chart-container">
+              <canvas id="salesMixChart"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-bold text-center mb-4 text-[#118AB2]">
+              The Funding Bridge: Initial Startup
+            </h3>
+            <div class="chart-container">
+              <canvas id="fundingChart"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <h3 class="text-xl font-bold text-center mb-4 text-[#118AB2]">
+              Path to Stability: Cash Flow vs. Debt
+            </h3>
+            <div class="chart-container">
+              <canvas id="stabilityChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="impact">
+        <h2 class="section-title text-center">Our Impact</h2>
+        <p class="max-w-3xl mx-auto text-center text-lg mb-12">
+          Our model is built on a direct partnership with the very heart of the
+          Rwenzori coffee landscape: its smallholder farmers. This isn't just
+          business; it's a commitment to community empowerment and sustainable
+          livelihoods.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div class="card">
+            <div class="text-6xl font-extrabold text-[#06D6A0]">2,500</div>
+            <div class="text-xl font-semibold mt-2">Dedicated Farmers</div>
+            <p class="mt-2 text-sm">
+              Directly partnered in our network, ensuring fair prices and
+              bypassing exploitative middlemen.
+            </p>
+          </div>
+          <div class="card">
+            <div class="text-6xl font-extrabold text-[#118AB2]">16</div>
+            <div class="text-xl font-semibold mt-2">Village Cooperatives</div>
+            <p class="mt-2 text-sm">
+              Organized and nurtured to improve quality, increase productivity,
+              and ensure financial accountability.
+            </p>
+          </div>
+          <div class="card">
+            <div class="text-6xl font-extrabold text-[#FFD166]">100%</div>
+            <div class="text-xl font-semibold mt-2">Traceability</div>
+            <p class="mt-2 text-sm">
+              Our deep community integration provides unrivaled traceability and
+              authenticity from bean to cup.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-white mt-12 py-8">
+      <div class="container mx-auto px-6 text-center text-gray-500">
+        <p>
+          &copy; 2025 Red2roast Europe. A strategic partnership for quality,
+          impact, and growth.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      const chartTooltipConfig = {
+        plugins: {
+          tooltip: {
+            callbacks: {
+              title: function (tooltipItems) {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                  return label.join(' ');
+                }
+                return label;
+              },
+            },
+          },
+        },
+      };
+
+      const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function (value) {
+                if (value >= 1000000) return value / 1000000 + 'M';
+                if (value >= 1000) return value / 1000 + 'k';
+                return value;
+              },
+            },
+          },
+        },
+        plugins: chartTooltipConfig.plugins,
+      };
+
+      function wrapLabel(label) {
+        const maxLength = 16;
+        if (typeof label !== 'string' || label.length <= maxLength) {
+          return label;
+        }
+        const words = label.split(' ');
+        const lines = [];
+        let currentLine = '';
+        words.forEach((word) => {
+          if ((currentLine + word).length > maxLength) {
+            lines.push(currentLine.trim());
+            currentLine = '';
+          }
+          currentLine += word + ' ';
+        });
+        lines.push(currentLine.trim());
+        return lines;
+      }
+
+      const years = ['2025', '2026', '2027', '2028', '2029', '2030'];
+
+      const marketSizeData = {
+        labels: ['Specialty Coffee (SAM)', 'Total Coffee Market (TAM)'],
+        datasets: [
+          {
+            label: 'Market Size (in Million USD)',
+            data: [120, 1200 - 120],
+            backgroundColor: ['#FF6B6B', '#06D6A0'],
+            borderColor: '#FFFFFF',
+            borderWidth: 2,
+          },
+        ],
+      };
+      new Chart(document.getElementById('marketSizeChart'), {
+        type: 'doughnut',
+        data: marketSizeData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            tooltip: chartTooltipConfig.plugins.tooltip,
+          },
+        },
+      });
+
+      const growthData = {
+        labels: years,
+        datasets: [
+          {
+            type: 'bar',
+            label: 'Total Revenue',
+            data: [313577, 888782, 1152105, 1396213, 1707812, 2106687],
+            backgroundColor: '#118AB2',
+            order: 2,
+          },
+          {
+            type: 'line',
+            label: 'Net Income',
+            data: [71267, 66661, 103264, 142848, 177520, 216719],
+            borderColor: '#FF6B6B',
+            backgroundColor: '#FF6B6B',
+            tension: 0.2,
+            fill: false,
+            order: 1,
+          },
+        ],
+      };
+      new Chart(document.getElementById('growthChart'), {
+        data: growthData,
+        options: chartOptions,
+      });
+
+      const salesMixData = {
+        labels: years,
+        datasets: [
+          {
+            label: 'Online',
+            data: [148760, 357025, 580165, 780992, 1045971, 1394628],
+            backgroundColor: '#06D6A0',
+            borderColor: '#06D6A0',
+            fill: true,
+          },
+          {
+            label: 'Wholesale',
+            data: [156425, 505880, 545338, 587875, 633729, 683160],
+            backgroundColor: '#FFD166',
+            borderColor: '#FFD166',
+            fill: true,
+          },
+          {
+            label: 'HORECA',
+            data: [8391, 25877, 26602, 27347, 28112, 28900],
+            backgroundColor: '#FF6B6B',
+            borderColor: '#FF6B6B',
+            fill: true,
+          },
+        ],
+      };
+      new Chart(document.getElementById('salesMixChart'), {
+        type: 'line',
+        data: salesMixData,
+        options: {
+          ...chartOptions,
+          scales: {
+            ...chartOptions.scales,
+            y: { ...chartOptions.scales.y, stacked: true },
+          },
+        },
+      });
+
+      const fundingData = {
+        labels: [
+          'Initial Capital',
+          'Startup Costs',
+          'Inventory Purchase',
+          'Salaries & OpEx',
+          'Ending Cash',
+        ],
+        datasets: [
+          {
+            label: 'Cash Flow',
+            data: [
+              [0, 65000], // Initial Capital (Loan + Equity)
+              -25370, // Startup Costs
+              -16260, // Inventory Purchase
+              -20412, // Salaries & OpEx (July-Sept)
+              [0, 358], // Ending Cash
+            ],
+            backgroundColor: (ctx) => {
+              const value = Array.isArray(ctx.raw)
+                ? ctx.raw[1] - ctx.raw[0]
+                : ctx.raw;
+              if (ctx.dataIndex === 0 || ctx.dataIndex === 4) return '#06D6A0'; // Start/End
+              return value > 0 ? '#118AB2' : '#FF6B6B'; // Inflow/Outflow
+            },
+            borderColor: 'rgba(0,0,0,0)',
+            borderWidth: 0,
+          },
+        ],
+      };
+      new Chart(document.getElementById('fundingChart'), {
+        type: 'bar',
+        data: fundingData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: 'x',
+          scales: {
+            x: {
+              stacked: true,
+            },
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function (value) {
+                  return value / 1000 + 'k';
+                },
+              },
+            },
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: chartTooltipConfig.plugins.tooltip,
+          },
+        },
+      });
+
+      const stabilityData = {
+        labels: years,
+        datasets: [
+          {
+            type: 'bar',
+            label: 'Net Cash from Operations',
+            data: [92356, 74834, 115303, 146200, 181758, 222100],
+            backgroundColor: '#06D6A0',
+          },
+          {
+            type: 'line',
+            label: 'Long-Term Debt',
+            data: [32235, 6837, 0, 0, 0, 0],
+            borderColor: '#FF6B6B',
+            backgroundColor: '#FF6B6B',
+            tension: 0.2,
+          },
+        ],
+      };
+      new Chart(document.getElementById('stabilityChart'), {
+        data: stabilityData,
+        options: chartOptions,
+      });
+
+      const navLinks = document.querySelectorAll('.nav-link');
+      navLinks.forEach((link) => {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth',
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
